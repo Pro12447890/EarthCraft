@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EarthCraft 2.0 / 16 сезон Эрчмапа | Официальный сайт</title>
+    <!-- Иконки FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Шрифт Inter -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+    
+    <style>
+        /* --- ПАЛИТРЫ ОФОРМЛЕНИЯ --- */
+        :root {
+            /* По умолчанию: Синеватая (Уютная) */
+            --bg-dark: #0a1128;
+            --glass-bg: rgba(16, 28, 64, 0.55);
+            --glass-card: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(100, 180, 255, 0.2);
+            --glass-border-hover: rgba(140, 210, 255, 0.45);
+            --accent-primary: #00b4d8;
+            --accent-secondary: #48cae4;
+            --accent-glow: rgba(0, 180, 216, 0.35);
+            --text-main: #f0f8ff;
+            --text-muted: #8da9c4;
+            --blob-1: #0077b6;
+            --blob-2: #00b4d8;
+            --blob-3: #03045e;
+            --vip-color: #38ef7d;
+            --premium-color: #ffd700;
+            --plus-color: #e056fd;
+        }
+
+        [data-theme="dark"] {
+            --bg-dark: #080911;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-card: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-border-hover: rgba(255, 255, 255, 0.35);
+            --accent-primary: #ff2a85;
+            --accent-secondary: #8a2be2;
+            --accent-glow: rgba(255, 42, 133, 0.35);
+            --text-main: #f0f3f9;
+            --text-muted: #a0a5b5;
+            --blob-1: #8a2be2;
+            --blob-2: #ff2a85;
+            --blob-3: #00f2fe;
+        }
+
+        [data-theme="white"] {
+            --bg-dark: #eef2f7;
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-card: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.12);
+            --glass-border-hover: rgba(58, 134, 255, 0.4);
+            --accent-primary: #3a86ff;
+            --accent-secondary: #8338ec;
+            --accent-glow: rgba(58, 134, 255, 0.25);
+            --text-main: #1d2d44;
+            --text-muted: #576574;
+            --blob-1: #a0c4ff;
+            --blob-2: #c8b6ff;
+            --blob-3: #ffc6ff;
+        }
+
+        [data-theme="red"] {
+            --bg-dark: #0d0203;
+            --glass-bg: rgba(40, 5, 8, 0.6);
+            --glass-card: rgba(255, 20, 40, 0.06);
+            --glass-border: rgba(255, 50, 50, 0.25);
+            --glass-border-hover: rgba(255, 80, 80, 0.6);
+            --accent-primary: #ff003c;
+            --accent-secondary: #990000;
+            --accent-glow: rgba(255, 0, 60, 0.4);
+            --text-main: #fff0f2;
+            --text-muted: #b8868b;
+            --blob-1: #e60000;
+            --blob-2: #800000;
+            --blob-3: #ff4d4d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* --- ЭФФЕКТ ВОЛНЫ ПРИ КЛИКЕ (RIPPLE) --- */
+        .click-wave {
+            position: fixed;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: waveRipple 0.6s linear;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        @keyframes waveRipple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* --- МЕДЛЕННО ПЕРЕМЕЩАЮЩИЕСЯ ТОЧКИ ФОНА --- */
+        .background-blobs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            filter: blur(90px);
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            animation: floatBlobs 22s infinite alternate ease-in-out;
+            opacity: 0.55;
+            transition: background 1s ease;
+        }
+
+        .blob-1 {
+            top: -10%;
+            left: -10%;
+            width: 55vw;
+            height: 55vw;
+            background: radial-gradient(circle, var(--blob-1), transparent 70%);
+        }
+
+        .blob-2 {
+            bottom: -10%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, var(--blob-2), transparent 70%);
+            animation-delay: -7s;
+        }
+
+        .blob-3 {
+            top: 35%;
+            left: 25%;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, var(--blob-3), transparent 70%);
+            animation-delay: -14s;
+        }
+
+        @keyframes floatBlobs {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            50% { transform: translate(80px, 50px) scale(1.15) rotate(180deg); }
+            100% { transform: translate(-50px, 90px) scale(0.85) rotate(360deg); }
+        }
+
+        /* --- ШАПКА И НАВИГАЦИЯ --- */
+        header {
+            position: sticky;
+            top: 15px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 15px;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+
+        .server-title {
+            font-size: 24px;
+            font-weight: 800;
+            text-align: center;
+            background: linear-gradient(135deg, var(--text-main), var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        .top-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 900px;
+            flex-wrap: wrap;
+        }
+
+        nav {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 6px;
+            display: flex;
+            gap: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        /* Палитра переключателя тем */
+        .theme-switcher {
+            display: flex;
+            gap: 6px;
+            background: var(--glass-bg);
+            padding: 6px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .theme-dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .theme-dot:hover { transform: scale(1.2); }
+        .theme-dot.active { border-color: #fff; transform: scale(1.1); }
+
+        .theme-dot.cozy { background: #00b4d8; }
+        .theme-dot.dark { background: #ff2a85; }
+        .theme-dot.white { background: #eef2f7; }
+        .theme-dot.red { background: #ff003c; }
+
+        /* --- КОНТЕЙНЕР С ВЕЕРНОЙ АНИМАЦИЕЙ --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .tab-content {
+            display: none;
+            width: 100%;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* --- АНИМАЦИИ ПЕРЕХОДА МЕЖДУ ВКЛАДКАМИ --- */
+        @keyframes slideOutLeft {
+            to { transform: translateX(-100px) scale(0.95); opacity: 0; }
+        }
+        @keyframes slideOutRight {
+            to { transform: translateX(100px) scale(0.95); opacity: 0; }
+        }
+        @keyframes slideInRight {
+            from { transform: translateX(100px) scale(0.95); opacity: 0; }
+            to { transform: translateX(0) scale(1); opacity: 1; }
+        }
+        @keyframes slideInLeft {
+            from { transform: translateX(-100px) scale(0.95); opacity: 0; }
+            to { transform: translateX(0) scale(1); opacity: 1; }
+        }
+
+        /* --- СТЕКЛЯННЫЕ КАРТОЧКИ С ИНТЕРАКТИВНОЙ ПОДСВЕТКОЙ КОНТУРА --- */
+        .glass-panel, .shop-card, .tier-card {
+            background: var(--glass-card);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        /* Динамическая подсветка контура от курсора */
+        .glass-panel::before, .shop-card::before, .tier-card::before {
+            content: '';
+            position: absolute;
+            top: var(--mouse-y, -100px);
+            left: var(--mouse-x, -100px);
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+
+        .glass-panel:hover::before, .shop-card:hover::before, .tier-card:hover::before {
+            opacity: 1;
+        }
+
+        .glass-panel:hover, .shop-card:hover, .tier-card:hover {
+            border-color: var(--glass-border-hover);
+        }
+
+        .section-title {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- МАГАЗИН --- */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .shop-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-bottom: 0;
+        }
+
+        .shop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .shop-card h3 { font-size: 18px; margin-bottom: 8px; color: var(--text-main); position: relative; z-index: 1; }
+        .shop-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; position: relative; z-index: 1; }
+        .shop-card .price { font-size: 22px; font-weight: 700; color: var(--accent-primary); margin-bottom: 15px; position: relative; z-index: 1; }
+
+        .btn-buy {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            box-shadow: 0 4px 15px var(--accent-glow);
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-buy:hover {
+            opacity: 0.95;
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px var(--accent-glow);
+        }
+
+        /* --- ДОНАТЫ --- */
+        .donate-tiers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tier-card {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0;
+        }
+
+        .tier-card h2 { font-size: 26px; margin-bottom: 8px; position: relative; z-index: 1; }
+        .tier-card.vip h2 { color: var(--vip-color); }
+        .tier-card.premium h2 { color: var(--premium-color); }
+        .tier-card.plus h2 { color: var(--plus-color); }
+
+        .time-selector {
+            display: flex;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 4px;
+            border-radius: 12px;
+            margin: 15px 0;
+            gap: 4px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .time-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 6px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .time-btn.active {
+            background: var(--glass-card);
+            color: var(--text-main);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .price-display {
+            font-size: 32px;
+            font-weight: 800;
+            margin: 10px 0 20px 0;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .price-display span.old-price {
+            font-size: 16px;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .tier-features {
+            list-style: none;
+            margin-bottom: 25px;
+            flex-grow: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tier-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 13px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- ТАБЛИЦА СРАВНЕНИЯ --- */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            min-width: 750px;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 12px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 13px;
+        }
+
+        .comparison-table th {
+            background: rgba(255, 255, 255, 0.05);
+            font-weight: 700;
+        }
+
+        .comparison-table th:first-child, .comparison-table td:first-child {
+            text-align: left;
+            width: 28%;
+        }
+
+        .tab-prefix-vip { color: #23b2ee; font-weight: bold; }
+        .tab-prefix-premium { color: #f39c12; font-weight: bold; }
+        .tab-prefix-plus { color: #e056fd; font-weight: bold; }
+
+        /* --- АККОРДЕОНЫ (FAQ) --- */
+        .faq-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .faq-header {
+            padding: 16px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .faq-header:hover { background: rgba(255, 255, 255, 0.06); }
+
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 20px;
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .faq-item.active .faq-content {
+            padding: 15px 20px;
+            max-height: 500px;
+        }
+
+        .faq-item.active .faq-header i { transform: rotate(180deg); }
+
+        /* --- РУКОВОДСТВО / ВИКИ --- */
+        .guide-chapter {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            z-index: 1;
+        }
+
+        .guide-chapter:last-child { border-bottom: none; }
+        .guide-chapter h3 { font-size: 18px; color: var(--accent-primary); margin-bottom: 10px; }
+        .guide-chapter p { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px; }
+
+        .cmd-badge {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-family: monospace;
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+        }
+
+        /* --- ВКЛАДКА "СОГЛАШЕНИЕ" И КОНТАКТЫ --- */
+        .eula-box {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 25px;
+            max-height: 480px;
+            overflow-y: auto;
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .eula-box h3 { color: var(--text-main); margin: 18px 0 8px 0; font-size: 15px; }
+        .eula-box h3:first-child { margin-top: 0; }
+
+        .contacts-section {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 20px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contacts-grid {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .contact-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 10px 18px;
+            border-radius: 14px;
+            color: var(--text-main);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .contact-pill:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--accent-primary);
+        }
+
+        /* --- МОДАЛЬНОЕ ОКНО --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .modal-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--glass-border-hover);
+            border-radius: 24px;
+            max-width: 580px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active .modal-card { transform: scale(1); }
+
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-close { background: transparent; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }
+
+        .steps-list { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .step-item { display: flex; gap: 12px; align-items: flex-start; background: rgba(255, 255, 255, 0.04); padding: 12px 14px; border-radius: 12px; }
+        .step-num { background: var(--accent-primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0; }
+        .step-text { font-size: 13px; color: var(--text-main); line-height: 1.5; }
+        .step-text a { color: var(--accent-secondary); text-decoration: underline; }
+
+        /* --- КНОПКА "НАВЕРХ" --- */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8a2be2, #d800ff);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 4px 20px rgba(216, 0, 255, 0.4);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-4px) scale(1.08);
+            box-shadow: 0 6px 25px rgba(216, 0, 255, 0.6);
+        }
+
+        /* --- ФУТЕР --- */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            padding: 25px 20px;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        /* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
+        @media (max-width: 768px) {
+            .nav-btn span { display: none; }
+            .nav-btn { padding: 10px 14px; }
+            .glass-panel { padding: 18px; }
+            .section-title { font-size: 20px; }
+            .back-to-top { bottom: 20px; right: 20px; width: 42px; height: 42px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Динамические плавающие фоновые пятна -->
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Шапка сайта -->
+    <header>
+        <div class="server-title">EarthCraft 2.0 / 16 сезон Эрчмапа</div>
+        
+        <div class="top-controls">
+            <!-- Выбор темы -->
+            <div class="theme-switcher">
+                <div class="theme-dot cozy active" title="Уютная синеватая" onclick="setTheme('cozy')"></div>
+                <div class="theme-dot dark" title="Чёрная" onclick="setTheme('dark')"></div>
+                <div class="theme-dot white" title="Светлая" onclick="setTheme('white')"></div>
+                <div class="theme-dot red" title="Гриферская красная" onclick="setTheme('red')"></div>
+            </div>
+
+            <!-- Центрированное меню вкладок -->
+            <nav>
+                <button class="nav-btn active" onclick="switchTab('shop')">
+                    <i class="fa-solid fa-cart-shopping"></i> <span>Магазин</span>
+                </button>
+                <button class="nav-btn" onclick="switchTab('donate')">
+                    <i class="fa-solid fa-gem"></i> <span>Донат</span>
+                </button>
+                <button class="nav-btn" onclick="switchTab('eula')">
+                    <i class="fa-solid fa-file-contract"></i> <span>Соглашение</span>
+                </button>
+                <button class="nav-btn" onclick="switchTab('info')">
+                    <i class="fa-solid fa-book-open"></i> <span>Вики / Инфо</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- ================= ВКЛАДКА 1: МАГАЗИН ================= -->
+        <section id="tab-shop" class="tab-content active">
+            <div class="glass-panel">
+                <h2 class="section-title"><i class="fa-solid fa-store" style="color: var(--accent-primary);"></i> Услуги и Сервисы</h2>
+                <div class="shop-grid">
+                    <div class="shop-card">
+                        <div>
+                            <h3>Разбан аккаунта</h3>
+                            <p>Покупка разбана одного аккаунта (1 раз). Полное снятие текущей блокировки.</p>
+                        </div>
+                        <div>
+                            <div class="price">100 ₽</div>
+                            <button class="btn-buy" onclick="openBuyModal('Разбан аккаунта (100 ₽)')">Купить</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card">
+                        <div>
+                            <h3>Разбан + Иммунитет</h3>
+                            <p>Разбан и защита от простых ошибок на 30 дней. Ослабление возможных наказаний.</p>
+                        </div>
+                        <div>
+                            <div class="price">145 ₽</div>
+                            <button class="btn-buy" onclick="openBuyModal('Разбан + Иммунитет (145 ₽)')">Купить</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card">
+                        <div>
+                            <h3>Перенос доната на твинк</h3>
+                            <p>Безопасный перенос вашей привилегии с основного аккаунта на дополнительный.</p>
+                        </div>
+                        <div>
+                            <div class="price">35 ₽</div>
+                            <button class="btn-buy" onclick="openBuyModal('Перенос доната на твинк (35 ₽)')">Купить</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card">
+                        <div>
+                            <h3>Перенос с забаненного аккаунта</h3>
+                            <p>Перенос купленного доната с заблокированного аккаунта на ваш новый профиль.</p>
+                        </div>
+                        <div>
+                            <div class="price">50 ₽</div>
+                            <button class="btn-buy" onclick="openBuyModal('Перенос доната с бана (50 ₽)')">Купить</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card">
+                        <div>
+                            <h3>Привилегированные условия</h3>
+                            <p>Ускоренное рассмотрение ваших обращений, жалоб и приоритетная поддержка.</p>
+                        </div>
+                        <div>
+                            <div class="price">30 ₽</div>
+                            <button class="btn-buy" onclick="openBuyModal('Привилегированные условия (30 ₽)')">Купить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ в Магазине -->
+            <div class="glass-panel">
+                <h3 class="section-title" style="font-size: 20px;"><i class="fa-solid fa-circle-question"></i> Часто задаваемые вопросы (FAQ)</h3>
+                <div class="faq-accordion">
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            Как работает услуга Иммунитета? <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-content">
+                            Иммунитет даёт прощение простых ошибок и снижает степень наказания при нарушениях. Работает ровно 30 дней с момента активации. Гарантию от бана при серьёзных нарушениях не даёт.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            Сколько времени занимает перенос доната? <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-content">
+                            Обычно услуга выполняется в течение 6–36 часов после подтверждения в Дискорде.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ВКЛАДКА 2: ДОНАТ ================= -->
+        <section id="tab-donate" class="tab-content">
+            <div class="donate-tiers">
+                <!-- VIP -->
+                <div class="tier-card vip">
+                    <h2>VIP</h2>
+                    <p style="color: var(--text-muted); font-size: 13px;">Базовые возможности + расширенные команды</p>
+                    
+                    <div class="time-selector">
+                        <button class="time-btn active" onclick="selectTierTime(this, 'vip', 45, 30)">45 дн.</button>
+                        <button class="time-btn" onclick="selectTierTime(this, 'vip', 90, 50)">90 дн.</button>
+                        <button class="time-btn" onclick="selectTierTime(this, 'vip', 180, 85)">180 дн.</button>
+                    </div>
+
+                    <div class="price-display" id="price-vip">30 ₽</div>
+
+                    <ul class="tier-features">
+                        <li><i class="fa-solid fa-check" style="color: var(--vip-color)"></i> /rtp — раз в 7 мин (100 бл.)</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--vip-color)"></i> /back — раз в 15 секунд</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--vip-color)"></i> /clan create — за 500 ешек</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--vip-color)"></i> /near — на 25 блоков</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--vip-color)"></i> Префикс в табе: <b>[VIP]</b></li>
+                    </ul>
+                    <button class="btn-buy" onclick="triggerTierBuy('VIP')">Приобрести VIP</button>
+                </div>
+
+                <!-- PREMIUM -->
+                <div class="tier-card premium">
+                    <h2>Premium</h2>
+                    <p style="color: var(--text-muted); font-size: 13px;">Все возможности VIP + повышенный комфорт</p>
+                    
+                    <div class="time-selector">
+                        <button class="time-btn active" onclick="selectTierTime(this, 'premium', 45, 100)">45 дн.</button>
+                        <button class="time-btn" onclick="selectTierTime(this, 'premium', 90, 150)">90 дн.</button>
+                        <button class="time-btn" onclick="selectTierTime(this, 'premium', 'forever', 200, 220)">Навсегда</button>
+                    </div>
+
+                    <div class="price-display" id="price-premium">100 ₽</div>
+
+                    <ul class="tier-features">
+                        <li><i class="fa-solid fa-check" style="color: var(--premium-color)"></i> /rtp — раз в 5 мин (150 бл.)</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--premium-color)"></i> /back — раз в 5 секунд</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--premium-color)"></i> /heal и /feed на себя и других</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--premium-color)"></i> /ec — открыть эндер-чест</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--premium-color)"></i> Скин по URL & 8 слотов аукциона</li>
+                    </ul>
+                    <button class="btn-buy" onclick="triggerTierBuy('Premium')">Приобрести Premium</button>
+                </div>
+
+                <!-- PLUS -->
+                <div class="tier-card plus">
+                    <h2>+ Plus +</h2>
+                    <p style="color: var(--text-muted); font-size: 13px;">Максимальный уровень привилегий</p>
+                    
+                    <div class="time-selector">
+                        <button class="time-btn active" onclick="selectTierTime(this, 'plus', 90, 300)">90 дн.</button>
+                        <button class="time-btn" onclick="selectTierTime(this, 'plus', 'forever', 500)">Навсегда</button>
+                    </div>
+
+                    <div class="price-display" id="price-plus">300 ₽</div>
+
+                    <ul class="tier-features">
+                        <li><i class="fa-solid fa-check" style="color: var(--plus-color)"></i> /rtp — раз в 3 мин (250 бл.)</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--plus-color)"></i> /back — Сразу (после боя)</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--plus-color)"></i> /clan create — <b>Бесплатно</b></li>
+                        <li><i class="fa-solid fa-check" style="color: var(--plus-color)"></i> /wings — Все крылья доступны</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--plus-color)"></i> Префикс: <b>{Plus +}</b></li>
+                    </ul>
+                    <button class="btn-buy" onclick="triggerTierBuy('+ Plus +')">Приобрести Plus</button>
+                </div>
+            </div>
+
+            <!-- ПОЛНАЯ СРАВНИТЕЛЬНАЯ ТАБЛИЦА -->
+            <div class="glass-panel">
+                <h3 class="section-title"><i class="fa-solid fa-table-list"></i> Подробное сравнение возможностей</h3>
+                <div class="table-container">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Донат/возможность</th>
+                                <th>Игрок<br><small style="color:var(--vip-color)">Базовые</small></th>
+                                <th>VIP<br><small style="font-weight:normal;">Все доната + игрока</small></th>
+                                <th>Premium<br><small style="font-weight:normal;">Все доната + VIP</small></th>
+                                <th><i>Plus</i><br><small style="font-weight:normal;"><b>Все доната + Premium</b></small></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><b>Возможности</b></td>
+                                <td style="color:var(--vip-color)">Базовые</td>
+                                <td>Все возможности этого <u>доната</u> + игрока</td>
+                                <td>Все возможности этого <u>доната</u> + VIP</td>
+                                <td><b>Все возможности этого <u>доната</u> + Premium</b></td>
+                            </tr>
+                            <tr>
+                                <td>/rtp – телепортация в случайную точку карты</td>
+                                <td>50 блоков/ раз в 10 минут</td>
+                                <td>100 блоков/ раз в 7 минут</td>
+                                <td>150 блоков/ раз в 5 минут</td>
+                                <td><b>250 блоков/ раз в 3 минуты</b></td>
+                            </tr>
+                            <tr>
+                                <td>/back – возвращение на место после смерти...</td>
+                                <td>Да, раз в 30 секунд</td>
+                                <td>Да, раз в 15 секунд</td>
+                                <td>Да, раз в 5 секунд</td>
+                                <td><b>Да, сразу</b><br><small style="color:var(--text-muted)">(при окончании режима боя)</small></td>
+                            </tr>
+                            <tr>
+                                <td>/clan create – создать клан</td>
+                                <td>Да, за 1000 ә</td>
+                                <td>Да, за 500 ә</td>
+                                <td>Да, за 100 ә</td>
+                                <td><b>Да, бесплатно</b></td>
+                            </tr>
+                            <tr>
+                                <td>/tptoggle – запретить телепортацию к себе</td>
+                                <td>Да, 150 ә</td>
+                                <td>Да, 15 ә</td>
+                                <td>Да</td>
+                                <td><b>Да</b></td>
+                            </tr>
+                            <tr>
+                                <td>Название страны в Дискорд сервере</td>
+                                <td>Любое</td>
+                                <td>Любое + можно эмодзи:<br>🔥/🎩/💥</td>
+                                <td>Любое + можно эмодзи:<br>⚡/🌞/💢</td>
+                                <td>Любое + можно эмодзи:<br>💎/🌀/🖊️/🧬</td>
+                            </tr>
+                            <tr>
+                                <td>Префикс в табе</td>
+                                <td>❌</td>
+                                <td><span class="tab-prefix-vip">[VIP]</span></td>
+                                <td><span class="tab-prefix-premium">[PREMIUM]</span></td>
+                                <td><span class="tab-prefix-plus">{Plus +}</span></td>
+                            </tr>
+                            <tr>
+                                <td>/near – узнать, кто вблизи (ник, расстояние)</td>
+                                <td><span style="color:var(--text-muted)">(15 блоков)</span></td>
+                                <td><span style="color:var(--text-muted)">(25 блоков)</span></td>
+                                <td>Да, 50 блоков</td>
+                                <td><b>Да, 75 блоков</b></td>
+                            </tr>
+                            <tr>
+                                <td>/feed – накормить себя</td>
+                                <td>❌</td>
+                                <td>Да (4 единицы/10 мин)</td>
+                                <td>Да (6 единиц/5 мин)</td>
+                                <td><b>Да (8 единиц/4 мин)</b></td>
+                            </tr>
+                            <tr>
+                                <td>/heal – излечить себя</td>
+                                <td>❌</td>
+                                <td>❌</td>
+                                <td>Да (4 единицы/5 мин)</td>
+                                <td><b>Да (6 единиц/4 мин)</b></td>
+                            </tr>
+                            <tr>
+                                <td>/feed другому игроку</td>
+                                <td>❌</td>
+                                <td>❌</td>
+                                <td>Да (5 единиц/10 мин)</td>
+                                <td><b>Да (7 единиц/5 мин)</b></td>
+                            </tr>
+                            <tr>
+                                <td>/heal другому игроку</td>
+                                <td>❌</td>
+                                <td>❌</td>
+                                <td>Да (3 единицы/5 мин)</td>
+                                <td><b>Да (5 единиц/4 мин)</b></td>
+                            </tr>
+                            <tr>
+                                <td>/ec – открыть эндер-чест</td>
+                                <td>❌</td>
+                                <td>❌</td>
+                                <td>Да (500 ә)</td>
+                                <td><b>Да (250 ә)</b></td>
+                            </tr>
+                            <tr>
+                                <td>/wings – крылья</td>
+                                <td>❌</td>
+                                <td>❌</td>
+                                <td>50% доступных</td>
+                                <td><b>Все</b></td>
+                            </tr>
+                            <tr>
+                                <td>Скины</td>
+                                <td>Только по нику</td>
+                                <td>Только по нику</td>
+                                <td>Любой скин по URL</td>
+                                <td><b>Любой скин по <u>URL</u></b></td>
+                            </tr>
+                            <tr>
+                                <td>Кол-во слотов на аукционе</td>
+                                <td>4</td>
+                                <td>6</td>
+                                <td>8</td>
+                                <td><b>12</b></td>
+                            </tr>
+                            <tr>
+                                <td>/tpahere – тп к себе</td>
+                                <td>❌</td>
+                                <td>Да</td>
+                                <td>Да</td>
+                                <td><b>Да</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ВКЛАДКА 3: СОГЛАШЕНИЕ (EULA) ================= -->
+        <section id="tab-eula" class="tab-content">
+            <div class="glass-panel">
+                <h2 class="section-title"><i class="fa-solid fa-file-signature"></i> Пользовательское соглашение (EULA)</h2>
+                
+                <div class="eula-box">
+                    <h3>Раздел 1. Преамбула и правовые определения</h3>
+                    <p>1.1. Настоящее Пользовательское соглашение (далее — «Соглашение») регулирует взаимоотношения между разработчиком и владельцем игрового проекта <b>Daymix</b> (далее — «Владелец») и физическим лицом, использующим сервисы проекта (далее — «Пользователь»).</p>
+                    <p>1.2. Весь игровой контент, название сервера <b>EarthCraft 2.0 / 16 сезон Эрчмапа</b>, графические и технические элементы принадлежат исключительно Daymix. Проект напрямую интегрирован с официальным Discord-сервером: <a href="https://discord.gg/D8eFZagDHb" target="_blank" style="color: var(--accent-primary);">https://discord.gg/D8eFZagDHb</a>.</p>
+
+                    <h3>Раздел 2. Статус пожертвований и донат-системы</h3>
+                    <p>2.1. Любые платежи, совершаемые Пользователем на сайте или через указанные платёжные реквизиты, являются <b>безвозмездным добровольным пожертвованием</b>, направленным на поддержку, содержание и развитие игрового сервера.</p>
+                    <p>2.2. Предоставляемые внутриигровые привилегии, статусы и команды представляют собой исключительно <u>необязательный бонус</u> за оказанную финансовую поддержку и не являются коммерческой купле-продажей товаров или услуг.</p>
+                    <p>2.3. Владелец зарегистрирован и осуществляет деятельность с учётом законодательных норм (самозанятость / личные безвозмездные пожертвования). Средства от друзей и пользователей квалифицируются как личные финансовые дары.</p>
+
+                    <h3>Раздел 3. Регламент оказания услуг и задержки</h3>
+                    <p>3.1. Стандартный срок обработки запроса и выдачи внутриигровых бонусов составляет от <b>6 до 36 часов</b> после отправки подтверждения в личные сообщения Владельцу.</p>
+                    <p>3.2. Пользователь признаёт и соглашается с тем, что отдельные промежуточные шаги, проверка платежа или техническая обработка могут занимать <b>более 36 часов</b> в случаях возникновения форс-мажорных ситуаций или технических сбоев.</p>
+
+                    <h3>Раздел 4. Условия термина «Навсегда» и перезапуски</h3>
+                    <p>4.1. Термин «Навсегда» (Lifetime) применительно к приобретаемым статусам означает весь период фактического функционирования текущего проекта EarthCraft 2.0.</p>
+                    <p>4.2. В случае прекращения работы сервера и его последующего переоткрытия (нового запуска), Пользователь имеет право обратиться к Владельцу с запросом на повторную выдачу ранее купленного донат-статуса.</p>
+                </div>
+
+                <!-- Блок контактов, размещённый ТОЛЬКО в Соглашении -->
+                <div class="contacts-section">
+                    <h3 style="font-size: 16px; color: var(--text-main);"><i class="fa-solid fa-address-book"></i> Контакты для связи с администрацией</h3>
+                    <div class="contacts-grid">
+                        <a href="mailto:mineprhap777@mail.ru" class="contact-pill"><i class="fa-solid fa-envelope"></i> mineprhap777@mail.ru</a>
+                        <a href="mailto:nbvc338gb@gmail.com" class="contact-pill"><i class="fa-solid fa-envelope"></i> nbvc338gb@gmail.com</a>
+                        <a href="https://discord.gg/D8eFZagDHb" target="_blank" class="contact-pill"><i class="fa-brands fa-discord"></i> Discord: @thedaymix (Владелец - Daymix)</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ВКЛАДКА 4: ВИКИ / ИНФО ================= -->
+        <section id="tab-info" class="tab-content">
+            <!-- БЛОК 1: Вопросы и ответы -->
+            <div class="glass-panel">
+                <h2 class="section-title"><i class="fa-solid fa-circle-question" style="color: var(--accent-primary);"></i> Частые вопросы о сервере</h2>
+                <div class="faq-accordion">
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            Можно ли играть на сервере без страны? <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-content">
+                            Да, можно, создание страны необязательно. Вы можете играть совершенно свободно от всех.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            Когда был создан сервер? <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-content">
+                            Сервер официально создан 23 февраля 2023 года.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            Что такое вайп? <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-content">
+                            Вайп — это сезон сервера, каждый новый вайп начинается на новой чистой карте, с обнулением всех изменений карты.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            Сколько длится вайп? <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-content">
+                            Если без факторов, из-за которых вайп может отмениться, то несколько месяцев.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            Можно ли использовать мод на карту? <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-content">
+                            Более того, мы настоятельно рекомендуем использовать таковой мод для удобной ориентации!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- БЛОК 2: Полное руководство -->
+            <div class="glass-panel">
+                <h2 class="section-title"><i class="fa-solid fa-book" style="color: var(--accent-secondary);"></i> Полное руководство по игре на EarthMap</h2>
+                
+                <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border-left: 4px solid var(--accent-primary); margin-bottom: 25px; font-size: 13px; font-style: italic;">
+                    ===== Добро пожаловать на полное руководство к игре на сервере "EarthMap" онлайн, бесплатное, без регистрации, СМС и звонков, созданное для новичков и заядлых задротов этого прекрасно анарх- ..., кхэ, доброго сервера! =====<br>
+                    <b>Версия руководства: 0.1 (2024.08.04)</b>
+                </div>
+
+                <div class="guide-chapter">
+                    <h3>Глава 1: Как войти на сервер</h3>
+                    <p>Для начала разберёмся, как нам с вами войти на сервер, подойдёт практически почти любой лаунчер версии игры "Minecraft Java Edition", сама игра от версии 1.8 (1.12.2), до почти самой новейшей, обычно сервер переходит на самую новую версию через две недели.</p>
+                    <p>В меню игры выбираем "Сетевая игра", нажимаем "Добавить сервер" и вводим IP-адрес сервера, а именно <span class="cmd-badge">theearthmap.aternos.me</span>, для тех, кто не сможет зайти, стоит попробовать с портом, а потому адрес сервера будет выглядеть таким образом: <span class="cmd-badge">theearthmap.aternos.me:54706</span>, в крайних случаях выдаётся другой айпи адрес, который меняется с каждым перезаходом на сервер.</p>
+                </div>
+
+                <div class="guide-chapter">
+                    <h3>Глава 2: Начало пути</h3>
+                    <p>Теперь нам осталось только подключиться к серверу, после чего вы должны зарегистрироваться, а в последующих входах на сервер логиниться.</p>
+                    <p>Вы появитесь на Кавказе, от которого вы сможете пойти в любую сторону, однако, временным препятствием станет расширяющаяся граница мира.</p>
+                    <p>Для ориентации на сервере советуем такие моды, как: <b>Xaero's World Map</b> и <b>Xaero's Mini Map</b>, вместе позволяющие открыть полномасштабную гибко настраиваемую карту, а также легендарную миникарту в углу, которую можно и поменять на другое место, хоть вообще выключить.</p>
+                </div>
+
+                <div class="guide-chapter">
+                    <h3>Глава 3: Основные понятия</h3>
+                    <p>Возможно, вам иногда будет непонятно, о чём может идти речь, самое банальное, это русификация названия сервера, а именно: EarthMap = ЭрчМап, также самое обширное понятие - это вайп, вайпом обозначается событие, когда сезон сервера завершается, карта мира стирается, становясь такой, какой она бывает в начале каждого нового вайпа/сезона (это, как вы поняли, одно и то же), то есть — чистой от построек игроков, а также инвентари игроков стираются, кроме баланса ешек у каждого.</p>
+                    <p>Что же такое "ешки"? — Спросите вы. Это — валюта сервера, скопированная конфигом с другого сервера Деймикса (Создателя сервера), которую можно заработать через продажу предметов, через команду <span class="cmd-badge">/shop</span>, однако покупать сами предметы нельзя, только у других игроков. Заработать её можно также и другим способом, а именно — побеждая мобов и игроков.</p>
+                </div>
+
+                <div class="guide-chapter">
+                    <h3>Глава 4: Разрушение стереотипов</h3>
+                    <p>Под таким громким заголовком я расскажу вам о мифах сервера. Во-первых, создать или войти в государство на сервере необязательно, я даже больше скажу: можно вообще играть от всех отдельно, а вместо государства создавать политические партии, кланы, клубы, организации и многое другое!</p>
+                    <p>Также я сам — создатель сервера, не сижу в гм3 и чекаю игроков, нет! Я играю вместе со всеми, с правами обычного игрока, лишь когда вайп закончился иногда в гм3, по приколу. А также чат на сервере глобальный, то есть ваше сообщение и без "!" увидят все игроки, из-за чего рекомендуем писать игрокам в ЛС — личные сообщения, о том, как это сделать, вы найдёте в 5 Главе ниже.</p>
+                </div>
+
+                <div class="guide-chapter">
+                    <h3>Глава 5: Команды</h3>
+                    <p><span class="cmd-badge">/msg</span> и <span class="cmd-badge">/tell</span> имеют одинаковое предназначение, а именно: писать личные сообщения другому игроку, которые другие игроки прочитать не смогут (а возможно и сможет Деймикс, случайно увидев в консоли, баня очередного грифера или читера по IP).</p>
+                    <p><span class="cmd-badge">/tpa</span>, <span class="cmd-badge">/tpaccept</span>, <span class="cmd-badge">/tpadeny</span>, <span class="cmd-badge">/tpahere</span>, <span class="cmd-badge">/tptoggle</span> — очень важные команды, связанные с телепортацией. Первая отправляет запрос на телепортацию к другому игроку, вторая этот запрос принимает, третья отклоняет, четвёртая телепортирует игрока к себе, пятая отключает и включает возможность телепортироваться к вам.</p>
+                    <p><span class="cmd-badge">/back</span> — Если вы умерли, то эта команда поможет вернуться на место смерти, но всё не так-то просто! А именно — вам во время телепортации на место смерти нельзя будет двигаться, а иначе команда собьётся.</p>
+                    <p><span class="cmd-badge">/shop</span> — Если вы подумали, что эта команда приведёт вас в магазин, то нет, она приведёт вас к скупщику.</p>
+                </div>
+
+                <div class="guide-chapter">
+                    <h3>Глава 6: Продолжение начала пути</h3>
+                    <p>И вот вы оказались в огромном мире, сразу прячьтесь от других игроков и находите подходящее место для базы, города или столицы своей страны. Вот карта безопасности местности, создававшаяся с учётом того, где выживали и бегали по миру разные игроки: красная зона опаснее, а белая — безопаснее, в морских территориях же опасная подмечается синим цветом (подробнее см. наш Дискорд-сервер).</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Плавающая кнопка "Наверх" -->
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="Вернуться наверх">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- Модальное окно покупки -->
+    <div class="modal-overlay" id="buyModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-item-title" style="color: var(--text-main); font-size: 18px;">Инструкция по покупке</h3>
+                <button class="modal-close" onclick="closeBuyModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">Пожалуйста, строго следуйте пошаговому алгоритму:</p>
+
+            <div class="steps-list">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="step-text">Вы соглашаетесь с Пользовательским соглашением и с тем, что на 100% намерены купить донат (бонус к поддержке сервера).</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="step-text">Перейдите в Discord-сервер в текстовый канал <b>├💵┤донат-чат</b>.</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <div class="step-text">Напишите сообщение: <b>«соглашаюсь!»</b>.</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">4</div>
+                    <div class="step-text">Оплатите по ссылке: <a href="https://www.donationalerts.com/r/the_daymix" target="_blank">donationalerts.com/r/the_daymix</a>.</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">5</div>
+                    <div class="step-text">Отправьте подтверждение оплаты в ЛС <b>@thedaymix</b> в Дискорде.</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">6</div>
+                    <div class="step-text">Ожидайте, пока <b>@thedaymix</b> поставит любую реакцию от своего имени.</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">7</div>
+                    <div class="step-text">Выдача доната происходит в среднем в течение <b>6–36 часов</b>.</div>
+                </div>
+            </div>
+
+            <button class="btn-buy" style="width: 100%; margin-top: 10px;" onclick="closeBuyModal()">Всё понятно</button>
+        </div>
+    </div>
+
+    <!-- Футер (Только Соцсети) -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="https://discord.gg/D8eFZagDHb" target="_blank" class="contact-pill"><i class="fa-brands fa-discord"></i> Discord Сервер</a>
+                <a href="https://t.me/TheEarthCraft" target="_blank" class="contact-pill"><i class="fa-paper-plane fa-solid"></i> Telegram Канал</a>
+            </div>
+            <p>EarthCraft 2.0 / 16 сезон Эрчмапа &copy; 2026. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <!-- Скрипты -->
+    <script>
+        // Интерактивная подсветка контуров карточек за курсором
+        document.addEventListener('mousemove', (e) => {
+            document.querySelectorAll('.glass-panel, .shop-card, .tier-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Эффект волны при клике (Ripple)
+        document.addEventListener('click', function(e) {
+            const wave = document.createElement('div');
+            wave.className = 'click-wave';
+            wave.style.left = `${e.clientX}px`;
+            wave.style.top = `${e.clientY}px`;
+            wave.style.width = '100px';
+            wave.style.height = '100px';
+            wave.style.margin = '-50px 0 0 -50px';
+            document.body.appendChild(wave);
+            setTimeout(() => wave.remove(), 600);
+        });
+
+        // Переключение палитры оформления
+        function setTheme(themeName) {
+            document.documentElement.setAttribute('data-theme', themeName);
+            document.querySelectorAll('.theme-dot').forEach(dot => dot.classList.remove('active'));
+            document.querySelector(`.theme-dot.${themeName}`).classList.add('active');
+        }
+
+        // Анимированное переключение вкладок с учётом направления
+        const tabOrder = ['shop', 'donate', 'eula', 'info'];
+        let currentTabIndex = 0;
+
+        function switchTab(tabName) {
+            const newIndex = tabOrder.indexOf(tabName);
+            if (newIndex === currentTabIndex) return;
+
+            const isRight = newIndex > currentTabIndex;
+            const currentTab = document.querySelector('.tab-content.active');
+            const newTab = document.getElementById('tab-' + tabName);
+
+            currentTab.style.animation = isRight ? 'slideOutLeft 0.25s forwards' : 'slideOutRight 0.25s forwards';
+
+            setTimeout(() => {
+                currentTab.classList.remove('active');
+                currentTab.style.animation = '';
+
+                newTab.classList.add('active');
+                newTab.style.animation = isRight ? 'slideInRight 0.35s forwards' : 'slideInLeft 0.35s forwards';
+                
+                currentTabIndex = newIndex;
+            }, 200);
+
+            document.querySelectorAll('.nav-btn').forEach((btn, idx) => {
+                btn.classList.toggle('active', idx === newIndex);
+            });
+        }
+
+        // Аккордеон FAQ
+        function toggleFaq(element) {
+            element.parentElement.classList.toggle('active');
+        }
+
+        // Калькулятор цен
+        function selectTierTime(btn, tier, time, price, oldPrice) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const priceDisplay = document.getElementById(`price-${tier}`);
+            if (oldPrice) {
+                priceDisplay.innerHTML = `${price} ₽ <span class="old-price">${oldPrice} ₽</span>`;
+            } else {
+                priceDisplay.innerHTML = `${price} ₽`;
+            }
+        }
+
+        // Модальное окно
+        function openBuyModal(itemTitle) {
+            document.getElementById('modal-item-title').innerText = 'Покупка: ' + itemTitle;
+            document.getElementById('buyModal').classList.add('active');
+        }
+
+        function closeBuyModal() {
+            document.getElementById('buyModal').classList.remove('active');
+        }
+
+        function triggerTierBuy(tierName) {
+            openBuyModal('Привилегия ' + tierName);
+        }
+
+        window.onclick = function(e) {
+            const modal = document.getElementById('buyModal');
+            if (e.target == modal) closeBuyModal();
+        }
+
+        // Плавная кнопка "Наверх"
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('backToTop');
+            if (window.scrollY > 300) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
